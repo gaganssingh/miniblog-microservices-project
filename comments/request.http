@@ -1,0 +1,9 @@
+GET http://localhost:4001/posts/f06c3cad/comments
+
+###
+POST http://localhost:4001/posts/123/comments
+Content-Type: application/json
+
+{
+  "content": "third"
+}
