@@ -44,5 +44,9 @@ This app server only one purpose: test out docker and kubernetes in development 
 
 ### General kubernetes commands:
 
-- `kubectl get pods`
-- `kubectl delete -f <path to pod configuration files>` Example: `kubectl delete -f infra/k8s/`
+- Show a list of all pods: `kubectl get pods`
+- Generate pods from inside a folder using a yaml file: `kubectl apply -f <PATH_TO_POD_CONFIG_YAML_FILES>`. Example: `kubectl delete -f infra/k8s/`
+- Delete a pod inside a specific folder: `kubectl delete -f <PATH_TO_POD_CONFIG_YAML_FILES>`. Example: `kubectl delete -f infra/k8s/`
+- Start a shell inside a running pod: `kubectl exec -it <POD_NAME> sh`
+- Get all logs from a pod: `kubectl logs <POD_NAME>`
+- Show information about a running pod: `kubectl describe pod <POD_NAME>`
