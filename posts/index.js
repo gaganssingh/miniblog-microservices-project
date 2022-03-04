@@ -38,6 +38,7 @@ app.post("/events", (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () =>
-  console.log(`✅ Posts server listening on port: ${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log("v55");
+  console.log(`✅ Posts server listening on port: ${PORT}`);
+});
