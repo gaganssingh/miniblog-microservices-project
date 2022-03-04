@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: NodePort
+  selector:
+    # What pods to expose to the outside
+    app: posts
+  ports:
+    # Port mapping NodePort:Internal-port
+    - name: posts
+      protocol: TCP
+      # From outside we access the NodePort service
+      # at this port. This can be anything
+      port: 4000
+      # Direct reference to the port in app.listen(PORT)
+      # NodePort forwards the traffic to this port internally
+      targetPort: 4000
