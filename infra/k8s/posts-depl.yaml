@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  # How many copies of the pod to run
+  replicas: 1
+  # Select the pod with the label "app: posts"
+  selector:
+    matchLabels:
+      app: posts
+  # Tells kubernetes to create a pod with label "app: posts"
+  # which is used in the sector section to ideitify the correct pod
+  template:
+    metadata:
+      labels:
+        app: posts
+    # Configure the pod
+    spec:
+      containers:
+        - name: posts
+          image: therealdarkdev/posts:latest
+          imagePullPolicy: Never
