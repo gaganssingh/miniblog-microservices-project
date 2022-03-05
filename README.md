@@ -8,6 +8,74 @@ A Mini microservices app built using:
 
 This app serves only one purpose: test out docker and kubernetes in development & production. Any code for the app itself is just dummy code, and must not be used in production. This project just highlights docker & kubernetes usage.
 
+### Steps:
+
+1. Build a docker image of the service. Example: auth service, posts service, event-bus etc.
+
+```
+docker build -t <DOCKER_ID>/<IMAGE NAME> .
+```
+
+2. Push the docker image to docker hub.
+
+```
+docker push <DOCKER_ID>/<IMAGE NAME>
+```
+
+3. Create a kubernetes deployment config for this service.
+
+```
+infra/k8s/posts-depl.yaml
+```
+
+4. Apply the kubernetes deployment.
+
+```
+kubectl apply -f infra/k8s/posts-depl.yaml
+```
+
+4. Create a ClusterIP Service that configures networking between all services. Wither append the ClusterIP Service in the service's depl.yaml file:
+
+```
+---
+apiVersion: v1
+kind: Service
+...
+...
+```
+
+Or create a new service file:
+
+```
+  posts-srv.yaml
+```
+
+5. Apply the kubernetes service along with the previous deployment.
+
+```
+kubectl apply -f infra/k8s/posts-depl.yaml
+```
+
+6. Replace all `http://localhost:PORT` with `http://<CLUSTER NAME>:PORT`. Example:
+
+```
+http://localhost:4005/events
+```
+
+TO
+
+```
+http://event-bus-srv:4005/events
+```
+
+7. Re-deploy the cluster/pods with all changes included using:
+
+   - Re-build all images
+   - Push all re-built images to docker hub
+   - `kubectl rollout restart deployment <DEPLOYMENT NAME>`
+
+8. A pod can now be accessed if a NodePort service was been defined for it.
+
 ### Dockering a service:
 
 - At the root of the service that needs dockerizing, create a file named `Dockerfile` without any extension and add the docker config:
@@ -71,6 +139,10 @@ This app serves only one purpose: test out docker and kubernetes in development 
   ```
   kubectl get deployments
   ```
+
+### How to create a ClusterIP Service
+
+To enable cross-pod communtcation (i.e. enable one pod to talk to another pod within a node).
 
 ### How to create a NodePort Service
 

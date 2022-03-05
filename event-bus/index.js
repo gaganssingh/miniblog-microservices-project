@@ -16,17 +16,17 @@ app.post("/events", (req, res) => {
 
   // Emit events to all services
   axios
-    .post("http://localhost:4000/events", event)
+    .post("http://posts-srv:4000/events", event)
     .catch((err) => console.log(`[❌ POSTS] ${err.message}`));
-  axios
-    .post("http://localhost:4001/events", event)
-    .catch((err) => console.log(`[❌ COMMENTS] ${err.message}`));
-  axios
-    .post("http://localhost:4002/events", event)
-    .catch((err) => console.log(`[❌ QUERY] ${err.message}`));
-  axios
-    .post("http://localhost:4003/events", event)
-    .catch((err) => console.log(`[❌ QUERY] ${err.message}`));
+  // axios
+  //   .post("http://localhost:4001/events", event)
+  //   .catch((err) => console.log(`[❌ COMMENTS] ${err.message}`));
+  // axios
+  //   .post("http://localhost:4002/events", event)
+  //   .catch((err) => console.log(`[❌ QUERY] ${err.message}`));
+  // axios
+  //   .post("http://localhost:4003/events", event)
+  //   .catch((err) => console.log(`[❌ QUERY] ${err.message}`));
 
   res.send({ statusL: "Ok 👍🏼" });
 });

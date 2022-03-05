@@ -1,39 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: posts-depl
+  name: event-bus-depl
 spec:
   # How many copies of the pod to run
   replicas: 1
-  # Select the pod with the label "app: posts"
+  # Select the pod with the label "app: event-bus"
   selector:
     matchLabels:
-      app: posts
-  # Tells kubernetes to create a pod with label "app: posts"
+      app: event-bus
+  # Tells kubernetes to create a pod with label "app: event-bus"
   # which is used in the sector section to ideitify the correct pod
   template:
     metadata:
       labels:
-        app: posts
+        app: event-bus
     # Configure the pod
     spec:
       containers:
-        - name: posts
-          image: therealdarkdev/posts:latest
+        - name: event-bus
+          image: therealdarkdev/event-bus:latest
           imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: posts-srv
+  name: event-bus-srv
 spec:
   # Tell service to direct incoming traffic to
-  # the pod with label "app: posts"
+  # the pod with label "app: event-bus"
   selector:
-    app: posts
+    app: event-bus
   type: ClusterIP # default is type of ClusterIP anyways
   ports:
-    - name: posts
+    - name: event-bus
       protocol: TCP
-      port: 4000
-      targetPort: 4000
+      port: 4005
+      targetPort: 4005
