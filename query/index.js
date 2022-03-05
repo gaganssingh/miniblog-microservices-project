@@ -51,8 +51,11 @@ const PORT = process.env.PORT || 4002;
 app.listen(PORT, async () => {
   console.log(`✅ Query server listening on port: ${PORT}`);
 
+  // SYNC ALL PREVIOUS EVENTS
+  // On startup, get all events that happened
+  // if/when the query service was offline
   const res = await axios
-    .get("http://localhost:4005/events")
+    .get("http://event-bus-srv:4005/events")
     .catch((err) => console.log(err));
   for (let event of res.data) {
     console.log(`➡️ Processing event: ${event.type}`);
