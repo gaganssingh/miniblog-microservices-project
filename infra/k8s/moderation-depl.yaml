@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  # How many copies of the pod to run
+  replicas: 1
+  # Select the pod with the label "app: moderation"
+  selector:
+    matchLabels:
+      app: moderation
+  # Tells kubernetes to create a pod with label "app: moderation"
+  # which is used in the sector section to ideitify the correct pod
+  template:
+    metadata:
+      labels:
+        app: moderation
+    # Configure the pod
+    spec:
+      containers:
+        - name: moderation
+          image: therealdarkdev/moderation:latest
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  # Tell service to direct incoming traffic to
+  # the pod with label "app: moderation"
+  selector:
+    app: moderation
+  type: ClusterIP # default is type of ClusterIP anyways
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003
+      targetPort: 4003

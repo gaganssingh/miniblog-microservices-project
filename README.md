@@ -10,7 +10,7 @@ This app serves only one purpose: test out docker and kubernetes in development 
 
 ### Steps:
 
-1. Build a docker image of the service. Example: auth service, posts service, event-bus etc.
+1. Build docker images of all services. Example: auth service, posts service, event-bus etc.
 
 ```
 docker build -t <DOCKER_ID>/<IMAGE NAME> .
@@ -32,6 +32,8 @@ infra/k8s/posts-depl.yaml
 
 ```
 kubectl apply -f infra/k8s/posts-depl.yaml
+kubectl apply -f infra/k8s/comments-depl.yaml
+...
 ```
 
 4. Create a ClusterIP Service that configures networking between all services. Wither append the ClusterIP Service in the service's depl.yaml file:
@@ -53,7 +55,19 @@ Or create a new service file:
 5. Apply the kubernetes service along with the previous deployment.
 
 ```
+kubectl apply -f <PATH TO DIRECTORY WITH yaml FILES>
+```
+
+OR specify each file individually
+
+```
 kubectl apply -f infra/k8s/posts-depl.yaml
+```
+
+AND for the Service config if you created one:
+
+```
+kubectl apply -f infra/k8s/posts-srv.yaml
 ```
 
 6. Replace all `http://localhost:PORT` with `http://<CLUSTER NAME>:PORT`. Example:

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  # How many copies of the pod to run
+  replicas: 1
+  # Select the pod with the label "app: comments"
+  selector:
+    matchLabels:
+      app: comments
+  # Tells kubernetes to create a pod with label "app: comments"
+  # which is used in the sector section to ideitify the correct pod
+  template:
+    metadata:
+      labels:
+        app: comments
+    # Configure the pod
+    spec:
+      containers:
+        - name: comments
+          image: therealdarkdev/comments:latest
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  # Tell service to direct incoming traffic to
+  # the pod with label "app: comments"
+  selector:
+    app: comments
+  type: ClusterIP # default is type of ClusterIP anyways
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 4001
+      targetPort: 4001
