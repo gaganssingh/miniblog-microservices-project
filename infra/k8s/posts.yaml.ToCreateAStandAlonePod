@@ -5,5 +5,5 @@ metadata:
 spec:
   containers:
     - name: posts
-      image: delete/posts:0.0.1
+      image: therealdarkdev/posts:0.0.1
       imagePullPolicy: Never

@@ -138,6 +138,16 @@ Add the following line at the bottom of the hosts file:
 127.0.0.1 posts.com
 ```
 
+5. Change all urls in the client app to the url specified in the hosts above. Example:
+
+```
+localhost:XXXX/posts/create to posts.com/posts/create
+```
+
+6. Re-build all pods that have been updated and re-push the images to docker hub.
+7. Re-apply the kubernetes config file and check if all pods are running without errors using `kubectl get pods`.
+8. Confirm the cluster is working as expected by visiting the hosts url in the web browser. Example: `http://posts.com/`.
+
 ---
 
 ### Dockering a service:

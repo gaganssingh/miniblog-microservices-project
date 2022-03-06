@@ -1,0 +1,81 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: blog-mern-microservices-app
+deploy:
+  kubectl:
+    # Same as `kubectl apply -f infra/k8s/`
+    manifests:
+      - infra/k8s/*
+build:
+  local:
+    # Disable pushing images to docker hub
+    # (default behaviour -> skaffold pushes all images to docker hub)
+    push: false
+  artifacts:
+    - image: therealdarkdev/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "src/**/*.js" # FOR REACT APP: as it has an src directory
+            dest: .
+    - image: therealdarkdev/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
