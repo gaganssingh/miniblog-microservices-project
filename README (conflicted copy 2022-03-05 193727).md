@@ -134,8 +134,7 @@ spec:
 Windows -> C:\Windows\System32\Drivers\etc\hosts
 MacOS -> /etc/hosts
 
-Add the following line at the bottom of the hosts file:
-127.0.0.1 posts.com
+`**127.0.0.1 posts.com**`
 ```
 
 ---
