@@ -8,7 +8,101 @@ A Mini microservices app built using:
 
 This app serves only one purpose: test out docker and kubernetes in development & production. Any code for the app itself is just dummy code, and must not be used in production. This project just highlights docker & kubernetes usage.
 
-### Steps:
+### Automatic/Continuous Development using Skaffold
+
+1. Create `Dockerfile` configs, and the accompanying `.dockerignore` files for all services.
+2. At the root of the project, create the `skaffold.yaml` config file for skaffold. Example config could look like:
+
+```
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: blog-mern-microservices-app
+deploy:
+  kubectl:
+    # Same as `kubectl apply -f infra/k8s/`
+    manifests:
+      - infra/k8s/*
+build:
+  local:
+    # Disable pushing images to docker hub
+    # (default behaviour -> skaffold pushes all images to docker hub)
+    push: false
+  artifacts:
+    - image: therealdarkdev/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "src/**/*.js" # FOR REACT APP: as it has an src directory
+            dest: .
+    - image: therealdarkdev/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+    - image: therealdarkdev/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # In case of changes: Sync changes from local directory to the pod
+          # But if change in anything else (e.g. added a new dependency in package.json)
+          # then rebuild the whole pod
+          - src: "*.js" # NO src directory
+            dest: .
+```
+
+3. Deploy everything using the command `skaffold dev` at the root of the project.
+4. Visit the host url specified in `infra/k8s/ingress-nginx.yaml` in a browser to see the app running.
+
+---
+
+### Manual Development:
 
 1. Build docker images of all services. Example: auth service, posts service, event-bus etc.
 
@@ -89,6 +183,8 @@ http://event-bus-srv:4005/events
    - `kubectl rollout restart deployment <DEPLOYMENT NAME>`
 
 8. A pod can now be accessed if a NodePort service was been defined for it.
+
+---
 
 ### Cluster communication with the outside world:
 
